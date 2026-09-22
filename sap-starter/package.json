@@ -1,0 +1,16 @@
+{
+  "name": "sap-playwright-starter",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test -c playwright.config.ts",
+    "test:ui": "playwright test -c playwright.config.ts --ui",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@types/node": "^25.3.3",
+    "typescript": "^5.6.3"
+  }
+}
