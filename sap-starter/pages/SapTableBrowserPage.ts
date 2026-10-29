@@ -49,7 +49,7 @@ export class SapTableBrowserPage {
 
   }
   async goTo() {
-    this.page.goto("/");
+    await this.page.goto("/");
 
   }
 

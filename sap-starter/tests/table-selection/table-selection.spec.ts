@@ -174,10 +174,10 @@ const tableCases: TableCase[] = [
  { 
     title: "/CFF/ENTITLEMENT",
     table: tables.entitlement,
-    filters: ["ENTITLEMENT_GUID", "ENTITLEMENT_TYPE", "ACTIVE"],
+    filters: ["ENT_GUID", "ENT_TYPE", "ACTIVE"],
     expected:{
         filterMissing:["ESID", "FR_GUID"],
-        filterVisible:["ENTITLEMENT_GUID", "ENTITLEMENT_TYPE", "ACTIVE"],
+        filterVisible:["ENT_GUID", "ENT_TYPE", "ACTIVE"],
         columns:["ENT_GUID", "ENT_TYPE", "ACTIVE", "CREATED_AT"],
     }
  }
@@ -244,12 +244,12 @@ test.describe('ADVANCED - Table Selection', () => {
 
     test('13) FR_PARENT are 5 coloane', async ({ sapPage, frParentPage }) => {
         await sapPage.navigateToTable(transactions.se16, tables.frParent);
-        await expect(sapPage.getRowCount()).toBe(5);
-        // await expect((await frParentPage.columnName(columnsFrParent.ESID)).
-        // await expect(frParentPage.tableCell(0, columnsFrParent.FR_GUID)).toContainText('FR_GUID');
-        await expect(frParentPage.tableCell(0, columnsFrParent.ENT_GUID)).toContainText('ENT_GUID');
-        await expect(frParentPage.tableCell(0, columnsFrParent.STATUS)).toContainText('STATUS');
-        await expect(frParentPage.tableCell(0, columnsFrParent.DESCRIPTION)).toContainText('DESCRIPTION');
+        await expect(sapPage.columnHeaderRow.locator('[data-column-name]')).toHaveCount(5);
+        await expect(sapPage.columnHeader(columnsFrParent.ESID)).toBeVisible();
+        await expect(sapPage.columnHeader(columnsFrParent.FR_GUID)).toBeVisible();
+        await expect(sapPage.columnHeader(columnsFrParent.ENT_GUID)).toBeVisible();
+        await expect(sapPage.columnHeader(columnsFrParent.STATUS)).toBeVisible();
+        await expect(sapPage.columnHeader(columnsFrParent.DESCRIPTION)).toBeVisible();
 
     });
 

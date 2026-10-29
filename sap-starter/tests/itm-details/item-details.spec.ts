@@ -65,11 +65,11 @@ test.describe('MIDDLE - Item Details', () => {
 
     test('3) Secondary entitlement branch > AMER', async ({ sapPage, itmDetailsPage}) =>{ 
         await sapPage.navigateToTable(transactions.se16, tables.itmDetails);
-        await itmDetailsPage.filterPARENTID.fill(secondaryAnchor.expectedValues.frGuid);
+        await itmDetailsPage.filterPARENTID.fill(secondaryAnchor.expectedValues.entGuid);
         await sapPage.btnExecute.click();
         await expect(sapPage.resultCount).toBeVisible();
         await expect.poll(()=>itmDetailsPage.getRowCount()).toBe(1);
-        await itmDetailsPage.tableCell(4, columnsItmDetails.REGION).getByText('AMER');
+        await expect(itmDetailsPage.tableCell(0, columnsItmDetails.REGION)).toHaveText('AMER');
 
     });
 
@@ -184,7 +184,7 @@ const tableCases: TableCase[] = [
             rows:1,
             parentId:"FR00000000000000000000000000A556",
             callOff:"CALL-FR-778",
-            setupFr:"SETUP:FR00000000000000000000000000A556",
+            setupFr:"SETUP:FR00000000000000000000000000A556:FR",
             region:"APJ",
             frGuid:"FR00000000000000000000000000A556",
         }
