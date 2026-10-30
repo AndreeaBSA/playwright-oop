@@ -15,9 +15,9 @@ class Inregistrare {
 class InregistrareEroare extends Inregistrare {
   readonly cod: number;
 
-  constructor(moment: string, text: string, cod: number) {
-    super(moment, text);
-    this.cod = cod;
+  constructor(moment1: string, text2: string, cod3: number) {
+    super(moment1, text2);
+    this.cod = cod3;
   }
 
   formateaza(): string {
@@ -29,6 +29,4 @@ const info = new Inregistrare("10:00:01", "Suita a pornit");
 const eroare = new InregistrareEroare("10:00:07", "Tabelul nu exista", 404);
 
 console.log(info.formateaza());
-console.log(eroare.formateaza());
-console.log("eroarea are moment:", eroare.moment);
-console.log("eroarea e si Inregistrare:", eroare instanceof Inregistrare);
+

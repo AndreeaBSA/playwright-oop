@@ -1,20 +1,15 @@
 import type { Page, Locator } from "@playwright/test";
+import { TablePage } from "./TablePage.js";
 
-export class CaseNotesPage {
-  readonly page: Page;
+export class CaseNotesPage extends TablePage {
     readonly filterREFERENCEID: Locator;
     readonly filterOWNER: Locator;
     readonly filterPRIORITY: Locator;
 
   constructor(page: Page) {
-    this.page = page;
+    super (page);
     this.filterREFERENCEID = this.filterInput("REFERENCE_ID");
     this.filterOWNER = this.filterInput("OWNER");
     this.filterPRIORITY = this.filterInput("PRIORITY");
   }
-
-filterInput(key: string): Locator {
-    return this.page.getByPlaceholder(new RegExp(`Filter by\\s+${key}$`, "i"));
-}
-
 }
