@@ -306,6 +306,42 @@ caseNoteRows.push(
   },
 );
 
+const contractRows: GenericRow[] = [
+  { DOC_NO: "DOC-4100", DOC_TYPE: "Booking", CONTRACT_ID: "C-0100", PRODUCT_ID: "PRD-CLOUD-01", START_DATE: "01.01.2026", END_DATE: "31.12.2026", ENT_ID: "ENT-0100" },
+  { DOC_NO: "DOC-4200", DOC_TYPE: "Booking", CONTRACT_ID: "C-0200", PRODUCT_ID: "PRD-CLOUD-01", START_DATE: "01.01.2026", END_DATE: "31.12.2026", ENT_ID: "ENT-0200" },
+  { DOC_NO: "DOC-4201", DOC_TYPE: "Upsell", CONTRACT_ID: "C-0200", PRODUCT_ID: "PRD-CLOUD-02", START_DATE: "30.10.2026", END_DATE: "31.12.2026", ENT_ID: "ENT-0200" },
+  { DOC_NO: "DOC-4300", DOC_TYPE: "Booking", CONTRACT_ID: "C-0300", PRODUCT_ID: "PRD-CLOUD-01", START_DATE: "01.01.2026", END_DATE: "31.12.2026", ENT_ID: "ENT-0300" },
+  { DOC_NO: "DOC-4301", DOC_TYPE: "Upsell", CONTRACT_ID: "C-0300", PRODUCT_ID: "PRD-CLOUD-02", START_DATE: "30.10.2026", END_DATE: "31.12.2026", ENT_ID: "ENT-0300" },
+];
+
+const entItemRows: GenericRow[] = [
+  { ENT_ID: "ENT-0100", ITEM_NO: "1000", ITEM_TYPE: "Tenant", STATUS: "Provided", START_DATE: "01.01.2026", END_DATE: "31.12.2026" },
+  { ENT_ID: "ENT-0100", ITEM_NO: "1001", ITEM_TYPE: "Phase", STATUS: "Open", START_DATE: "01.01.2026", END_DATE: "31.12.2026" },
+  { ENT_ID: "ENT-0100", ITEM_NO: "5001", ITEM_TYPE: "Request", STATUS: "In Progress", START_DATE: "", END_DATE: "" },
+  { ENT_ID: "ENT-0200", ITEM_NO: "1000", ITEM_TYPE: "Tenant", STATUS: "Provided", START_DATE: "01.01.2026", END_DATE: "31.12.2026" },
+  { ENT_ID: "ENT-0200", ITEM_NO: "1001", ITEM_TYPE: "Phase", STATUS: "Completed", START_DATE: "01.01.2026", END_DATE: "29.10.2026" },
+  { ENT_ID: "ENT-0200", ITEM_NO: "1002", ITEM_TYPE: "Phase", STATUS: "Open", START_DATE: "30.10.2026", END_DATE: "31.12.2026" },
+  { ENT_ID: "ENT-0200", ITEM_NO: "5001", ITEM_TYPE: "Request", STATUS: "In Progress", START_DATE: "", END_DATE: "" },
+  { ENT_ID: "ENT-0200", ITEM_NO: "5002", ITEM_TYPE: "Request", STATUS: "In Progress", START_DATE: "", END_DATE: "" },
+  { ENT_ID: "ENT-0300", ITEM_NO: "1000", ITEM_TYPE: "Tenant", STATUS: "Provided", START_DATE: "01.01.2026", END_DATE: "31.12.2026" },
+  { ENT_ID: "ENT-0300", ITEM_NO: "1001", ITEM_TYPE: "Phase", STATUS: "Completed", START_DATE: "01.01.2026", END_DATE: "29.10.2026" },
+  { ENT_ID: "ENT-0300", ITEM_NO: "1002", ITEM_TYPE: "Phase", STATUS: "Open", START_DATE: "30.12.2026", END_DATE: "31.12.2026" },
+  { ENT_ID: "ENT-0300", ITEM_NO: "5001", ITEM_TYPE: "Request", STATUS: "In Progress", START_DATE: "", END_DATE: "" },
+  { ENT_ID: "ENT-0300", ITEM_NO: "5002", ITEM_TYPE: "Request", STATUS: "In Progress", START_DATE: "", END_DATE: "" },
+];
+
+const scheduledActionRows: GenericRow[] = [
+  { ACTION_ID: "ACT-7100", DOC_NO: "DOC-4100", ACTION_TYPE: "OPEN_PHASE", TARGET_ITEM: "1001", STATUS: "Done" },
+  { ACTION_ID: "ACT-7200", DOC_NO: "DOC-4200", ACTION_TYPE: "OPEN_PHASE", TARGET_ITEM: "1001", STATUS: "Done" },
+  { ACTION_ID: "ACT-7201", DOC_NO: "DOC-4201", ACTION_TYPE: "CLOSE_PHASE", TARGET_ITEM: "1001", STATUS: "Done" },
+  { ACTION_ID: "ACT-7202", DOC_NO: "DOC-4201", ACTION_TYPE: "OPEN_PHASE", TARGET_ITEM: "1002", STATUS: "Done" },
+  { ACTION_ID: "ACT-7203", DOC_NO: "DOC-4201", ACTION_TYPE: "NOTIFY_CUSTOMER", TARGET_ITEM: "1000", STATUS: "Done" },
+  { ACTION_ID: "ACT-7300", DOC_NO: "DOC-4300", ACTION_TYPE: "OPEN_PHASE", TARGET_ITEM: "1001", STATUS: "Done" },
+  { ACTION_ID: "ACT-7301", DOC_NO: "DOC-4301", ACTION_TYPE: "CLOSE_PHASE", TARGET_ITEM: "1001", STATUS: "Done" },
+  { ACTION_ID: "ACT-7302", DOC_NO: "DOC-4301", ACTION_TYPE: "OPEN_PHASE", TARGET_ITEM: "1002", STATUS: "Done" },
+  { ACTION_ID: "ACT-7303", DOC_NO: "DOC-4301", ACTION_TYPE: "NOTIFY_CUSTOMER", TARGET_ITEM: "1000", STATUS: "Done" },
+];
+
 export const mockTables: Record<string, TableDefinition> = {
   "/CFF/FR_PARENT": {
     name: "/CFF/FR_PARENT",
@@ -408,6 +444,38 @@ export const mockTables: Record<string, TableDefinition> = {
       ["anchor-ent", "Automation ENT", "Case notes for the deterministic entitlement anchor.", { REFERENCE_ID: automationEntGuid }],
     ]),
     rows: caseNoteRows,
+  },
+  "/CFF/CONTRACTS": {
+    name: "/CFF/CONTRACTS",
+    description: "Contract documents (booking, upsell) and the entitlement they create.",
+    columns: ["DOC_NO", "DOC_TYPE", "CONTRACT_ID", "PRODUCT_ID", "START_DATE", "END_DATE", "ENT_ID"],
+    filterFields: [
+      { key: "CONTRACT_ID", label: "Contract ID", placeholder: "Filter by CONTRACT_ID" },
+      { key: "DOC_TYPE", label: "Document Type", placeholder: "Filter by DOC_TYPE" },
+      { key: "ENT_ID", label: "Entitlement ID", placeholder: "Filter by ENT_ID" },
+    ],
+    rows: contractRows,
+  },
+  "/CFF/ENT_ITEMS": {
+    name: "/CFF/ENT_ITEMS",
+    description: "Entitlement items: tenant, phases and requests.",
+    columns: ["ENT_ID", "ITEM_NO", "ITEM_TYPE", "STATUS", "START_DATE", "END_DATE"],
+    filterFields: [
+      { key: "ENT_ID", label: "Entitlement ID", placeholder: "Filter by ENT_ID" },
+      { key: "ITEM_TYPE", label: "Item Type", placeholder: "Filter by ITEM_TYPE" },
+      { key: "STATUS", label: "Status", placeholder: "Filter by STATUS" },
+    ],
+    rows: entItemRows,
+  },
+  "/CFF/SCHED_ACTIONS": {
+    name: "/CFF/SCHED_ACTIONS",
+    description: "Scheduled actions created by a contract document.",
+    columns: ["ACTION_ID", "DOC_NO", "ACTION_TYPE", "TARGET_ITEM", "STATUS"],
+    filterFields: [
+      { key: "DOC_NO", label: "Document No", placeholder: "Filter by DOC_NO" },
+      { key: "STATUS", label: "Status", placeholder: "Filter by STATUS" },
+    ],
+    rows: scheduledActionRows,
   },
 };
 
