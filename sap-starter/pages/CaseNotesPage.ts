@@ -1,7 +1,9 @@
 import type { Page, Locator } from "@playwright/test";
 import { TablePage } from "./TablePage.js";
+import { tables } from "../utils/test-data.js";
 
 export class CaseNotesPage extends TablePage {
+  readonly tableName = tables.caseNotes;
     readonly filterREFERENCEID: Locator;
     readonly filterOWNER: Locator;
     readonly filterPRIORITY: Locator;

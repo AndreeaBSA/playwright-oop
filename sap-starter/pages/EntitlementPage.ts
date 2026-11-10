@@ -1,7 +1,9 @@
 import type { Page, Locator } from "@playwright/test";
 import { TablePage } from "./TablePage.js";
+import { tables } from "../utils/test-data.js";
 
 export class EntitlementPage extends TablePage{
+  readonly tableName = tables.entitlement;
   readonly filterEntitlementGuid: Locator;
   readonly filterEntitlementType: Locator;
   readonly filterActive: Locator;
@@ -13,3 +15,4 @@ export class EntitlementPage extends TablePage{
     this.filterActive = this.filterInput("ACTIVE");
   }
 }
+

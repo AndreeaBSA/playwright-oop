@@ -1,6 +1,5 @@
 import { test, expect } from "../../fixtures/test-fixtures.js";
-import { FrParentPage } from "../../pages/FrParentPage.js";
-import { automationAnchor, columnsFrParent, secondaryAnchor, tables, tertiaryAnchor, transactions, emptyGuid } from "../../utils/test-data.js";
+import { automationAnchor, columnsFrParent, secondaryAnchor, tables, tertiaryAnchor, emptyGuid } from "../../utils/test-data.js";
 
 
 // ## BEGINNER
@@ -30,14 +29,16 @@ import { automationAnchor, columnsFrParent, secondaryAnchor, tables, tertiaryAnc
 
 test.describe('BEGINER - Table FR_Parent', () => {
 
-  test("ESID filter", async ({ sapPage, frParentPage }) => {
-    //Arrange
-    await sapPage.goTo();
-    await sapPage.commandInput.fill(transactions.se16);
-    await sapPage.btnOpen.click();
-    //act
-    await sapPage.tableNameInput.fill(tables.frParent);
-    await sapPage.btnExecute.click();
+  test("ESID filter", async ({ frParentPage }) => {
+    // //Arrange
+    // await sapPage.goTo();
+    // await sapPage.commandInput.fill(transactions.se16);
+    // await sapPage.btnOpen.click();
+    // //act
+    // await sapPage.tableNameInput.fill(tables.frParent);
+    // await sapPage.btnExecute.click(); => va fi stearsa, deoarece execute este deja click in open()
+
+    await frParentPage.open(); // Exercitiu 2 Abstractizare: 4. fr_parent.spec.ts fara sapPage => inlocuieste randurile Arrange si Act
 
     const expectedfrGuid = 'FR0000000000000000000000001389';
     await frParentPage.filterESID.fill(automationAnchor.esid)
@@ -45,14 +46,9 @@ test.describe('BEGINER - Table FR_Parent', () => {
     await expect(frParentPage.tableCell(0, columnsFrParent.FR_GUID)).toHaveText(expectedfrGuid);
   })
 
-  test("Multiple Filter", async ({ sapPage, frParentPage }) => {
-    //Arrange
-    await sapPage.goTo();
-    await sapPage.commandInput.fill(transactions.se16);
-    await sapPage.btnOpen.click();
-    //act
-    await sapPage.tableNameInput.fill(tables.frParent);
-    await sapPage.btnExecute.click();
+  test("Multiple Filter", async ({ frParentPage }) => {
+
+    await frParentPage.open(); // Exercitiu 2 Abstractizare: 4. fr_parent.spec.ts fara sapPage
 
     await frParentPage.filterESID.fill(`ESID-100`);
 
@@ -64,32 +60,22 @@ test.describe('BEGINER - Table FR_Parent', () => {
   });
 
 
-  test("3) Filter submit by Enter", async ({ sapPage, frParentPage }) => {
-    //Arrange
-    await sapPage.goTo();
-    await sapPage.commandInput.fill(transactions.se16);
-    await sapPage.btnOpen.click();
-    //act
-    await sapPage.tableNameInput.fill(tables.frParent);
-    await sapPage.btnExecute.click();
+  test("3) Filter submit by Enter", async ({ frParentPage }) => {
+
+    await frParentPage.open(); // Exercitiu 2 Abstractizare: 4. fr_parent.spec.ts fara sapPage
 
     await frParentPage.filterESID.fill(`ESID`);
-    await sapPage.tableNameInput.press('Enter');
+    await frParentPage.tableNameInput.press('Enter');
     const selectedTable1 = tables.frParent;
-    await expect(sapPage.currentResults).toHaveText(selectedTable1);
+    await expect(frParentPage.currentResults).toHaveText(selectedTable1);
   });
 
 
-  test("4) FR_GUID lookup", async ({ sapPage, frParentPage }) => {
-    //Arrange
-    await sapPage.goTo();
-    await sapPage.commandInput.fill(transactions.se16);
-    await sapPage.btnOpen.click();
-    //act
-    await sapPage.tableNameInput.fill(tables.frParent);
-    await frParentPage.filterFRGUID.fill(secondaryAnchor.expectedValues.frGuid);
-    await sapPage.btnExecute.click();
+  test("4) FR_GUID lookup", async ({  frParentPage }) => {
 
+    await frParentPage.open(); // Exercitiu 2 Abstractizare: 4. fr_parent.spec.ts fara sapPage  
+    await frParentPage.filterFRGUID.fill(secondaryAnchor.expectedValues.frGuid);
+    await frParentPage.btnExecute.click();
     //expect
     //const expectedfrGuid = 'FR00000000000000000000000000A556';
     await expect(frParentPage.tableCell(0, columnsFrParent.ESID)).toHaveText(secondaryAnchor.esid);
@@ -128,15 +114,8 @@ test.describe('MIDDLE - Table FR_Parent', () => {
 
 
 
-  test("5. FR_GUID si ENT_GUID sunt diferite", async ({ sapPage, frParentPage }) => {
-    //Arrange
-    await sapPage.goTo();
-    await sapPage.commandInput.fill(transactions.se16);
-    await sapPage.btnOpen.click();
-    //act
-    await sapPage.tableNameInput.fill(tables.frParent);
-    await frParentPage.filterFRGUID.fill(automationAnchor.expectedValues.frGuid);
-    await sapPage.btnExecute.click();
+  test("5. FR_GUID si ENT_GUID sunt diferite", async ({ frParentPage }) => {
+  await frParentPage.open(); // Exercitiu 2 Abstractizare: 4. fr_parent.spec.ts fara sapPage
 
     //expect
     // versiune Andreea
@@ -144,88 +123,67 @@ test.describe('MIDDLE - Table FR_Parent', () => {
       .not.toHaveText(automationAnchor.expectedValues.frGuid);
 
     // versiune Bogdan = readable
-    const frGuid = await sapPage.getCellText(0, columnsFrParent.FR_GUID);
-    const entGuid = await sapPage.getCellText(0, columnsFrParent.ENT_GUID);
+    const frGuid = await frParentPage.getCellText(0, columnsFrParent.FR_GUID);
+    const entGuid = await frParentPage.getCellText(0, columnsFrParent.ENT_GUID);
     expect(frGuid).not.toBe(entGuid);
 
 
     await frParentPage.filterFRGUID.fill(automationAnchor.expectedValues.frGuid);
-    await sapPage.btnExecute.click();
+    await frParentPage.btnExecute.click();
 
   });
 
-  test('6. Extragere GUID-uri pentru ancora secundara', async ({ sapPage, frParentPage }) => {
-    //Arrange
-    await sapPage.goTo();
-    await sapPage.commandInput.fill(transactions.se16);
-    await sapPage.btnOpen.click();
-    //act
-    await sapPage.tableNameInput.fill(tables.frParent);
+  test('6. Extragere GUID-uri pentru ancora secundara', async ({ frParentPage }) => {
+    await frParentPage.open(); // Exercitiu 2 Abstractizare: 4. fr_parent.spec.ts fara sapPage
     await frParentPage.filterESID.fill(secondaryAnchor.esid);
-    await sapPage.btnExecute.click();
+    await frParentPage.btnExecute.click();
     //expect
-    const frGuid = await sapPage.getCellText(0, columnsFrParent.FR_GUID);
-    const entGuid = await sapPage.getCellText(0, columnsFrParent.ENT_GUID);
+    const frGuid = await frParentPage.getCellText(0, columnsFrParent.FR_GUID);
+    const entGuid = await frParentPage.getCellText(0, columnsFrParent.ENT_GUID);
     expect(frGuid).toBe(secondaryAnchor.expectedValues.frGuid);
     expect(entGuid).toBe(secondaryAnchor.expectedValues.entGuid);
   });
 });
 
 
-test('7. Row count correct', async ({ sapPage }) => {
-  //Arrange
-  await sapPage.goTo();
-  await sapPage.commandInput.fill(transactions.se16);
-  await sapPage.btnOpen.click();
-  //act
-  await sapPage.tableNameInput.fill(tables.frParent);
-  await sapPage.btnExecute.click();
+test('7. Row count correct', async ({ frParentPage }) => {
+  await frParentPage.open(); // Exercitiu 2 Abstractizare: 4. fr_parent.spec.ts fara sapPage
 
   //expect
-  await expect(sapPage.resultCount).toBeVisible(); // => in debug passed , normal era fail
-  const rowCount = await sapPage.getRowCount();
-  await expect(sapPage.resultCount).toContainText(`${rowCount} rows`);
+  await expect(frParentPage.resultCount).toBeVisible(); // => in debug passed , normal era fail
+  const rowCount = await frParentPage.getRowCount();
+  await expect(frParentPage.resultCount).toContainText(`${rowCount} rows`);
 });
 
 
-test('8. Blocked row', async ({ sapPage, frParentPage }) => {
-  //Arrange
-  await sapPage.goTo();
-  await sapPage.commandInput.fill(transactions.se16);
-  await sapPage.btnOpen.click();
-  //act
-  await sapPage.tableNameInput.fill(tables.frParent);
+test('8. Blocked row', async ({ frParentPage }) => {
+  await frParentPage.open(); // Exercitiu 2 Abstractizare: 4. fr_parent.spec.ts fara sapPage
   await frParentPage.filterSTATUS.fill("Blocked");
   //fill(`ESID-779`);
-  await sapPage.btnExecute.click();
+  await frParentPage.btnExecute.click();
   //expect
-  await expect(sapPage.resultCount).toBeVisible();
+  await expect(frParentPage.resultCount).toBeVisible();
 
-  const rowIndex = await sapPage.findFirstRowIndexByColumnValue("ESID", tertiaryAnchor.esid);
+  const rowIndex = await frParentPage.findFirstRowIndexByColumnValue("ESID", tertiaryAnchor.esid);
   //const emptyGuid = "00000000000000000000000000000000";
   console.log(rowIndex);
 
   expect(rowIndex).toBeGreaterThanOrEqual(0);
-  await expect(sapPage.cell(rowIndex, "ESID")).toHaveText("ESID-779");
-  await expect(sapPage.cell(rowIndex, "ENT_GUID")).toHaveText(emptyGuid);
+  await expect(frParentPage.cell(rowIndex, "ESID")).toHaveText("ESID-779");
+  await expect(frParentPage.cell(rowIndex, "ENT_GUID")).toHaveText(emptyGuid);
 
 });
 
-test('9. Active rows', async ({ sapPage, frParentPage }) => {
-  //Arrange
-  await sapPage.goTo();
-  await sapPage.commandInput.fill(transactions.se16);
-  await sapPage.btnOpen.click();
-  //act
-  await sapPage.tableNameInput.fill(tables.frParent);
+test('9. Active rows', async ({ frParentPage }) => {
+  await frParentPage.open(); // Exercitiu 2 Abstractizare: 4. fr_parent.spec.ts fara sapPage
   await frParentPage.filterSTATUS.fill("Active");
   //fill(`ESID-779`);
-  await sapPage.btnExecute.click();
+  await frParentPage.btnExecute.click();
   //expect
-  await expect(sapPage.resultCount).toBeVisible();
+  await expect(frParentPage.resultCount).toBeVisible();
 
-  const rowCount = await sapPage.getRowCount();
-  await expect(sapPage.resultCount).toContainText(`${rowCount} rows`);
+  const rowCount = await frParentPage.getRowCount();
+  await expect(frParentPage.resultCount).toContainText(`${rowCount} rows`);
   
   for (let index = 0; index < rowCount; index +=1){
     await expect(frParentPage.tableCell(0, columnsFrParent.STATUS)).toHaveText("Active");
@@ -278,15 +236,10 @@ test.describe('Middle-Parametrizabil', () => {
 
 
   for (const testCase of singleRowByEsid) {
-    test(`single row :${testCase.esid}-> celule asteptate`, async ({ sapPage, frParentPage }) => {
-      //Arrange
-      await sapPage.goTo();
-      await sapPage.commandInput.fill(transactions.se16);
-      await sapPage.btnOpen.click();
-      //act
-      await sapPage.tableNameInput.fill(tables.frParent);
+    test(`single row :${testCase.esid}-> celule asteptate`, async ({ frParentPage }) => {
+      await frParentPage.open(); // Exercitiu 2 Abstractizare: 4. fr_parent.spec.ts fara sapPage  
       await frParentPage.filterESID.fill(testCase.esid);
-      await sapPage.btnExecute.click();
+      await frParentPage.btnExecute.click();
       // expect
       await expect.poll(() => frParentPage.getRowCount()).toBe(1);
       for (const [column, value] of Object.entries(testCase.expected)) {
@@ -300,19 +253,14 @@ test.describe('Middle-Parametrizabil', () => {
   //     x+=7 => x=x+7 x devine 10
 
   for ( const status of statusOnly) {
-    test(`Validation of ${status}`, async ({sapPage, frParentPage}) => {
-      //Arrange
-      await sapPage.goTo();
-      await sapPage.commandInput.fill(transactions.se16);
-      await sapPage.btnOpen.click();
-      //act
-      await sapPage.tableNameInput.fill(tables.frParent);
+    test(`Validation of ${status}`, async ({ frParentPage}) => {
+      await frParentPage.open(); // Exercitiu 2 Abstractizare: 4. fr_parent.spec.ts fara sapPage
       await frParentPage.filterSTATUS.fill(status);
-      await sapPage.btnExecute.click();
+      await frParentPage.btnExecute.click();
 
       //assert
-      await expect(sapPage.resultCount).toBeVisible();
-      const rowCount = await sapPage.getRowCount();
+      await expect(frParentPage.resultCount).toBeVisible();
+      const rowCount = await frParentPage.getRowCount();
       expect(rowCount).toBeGreaterThan(1);
       for (let index = 0; index < rowCount; index++) {
         console.log(rowCount);
@@ -323,19 +271,14 @@ test.describe('Middle-Parametrizabil', () => {
 
 
   for ( const rowNumber of rowCountByEsid) {
-    test(` row count ${rowNumber.count}`, async ({sapPage, frParentPage}) => {
-      //Arrange
-      await sapPage.goTo();
-      await sapPage.commandInput.fill(transactions.se16);
-      await sapPage.btnOpen.click();
-      //act
-      await sapPage.tableNameInput.fill(tables.frParent);
+    test(` row count ${rowNumber.count}`, async ({ frParentPage}) => {
+      await frParentPage.open(); // Exercitiu 2 Abstractizare: 4. fr_parent.spec.ts fara sapPage
       await frParentPage.filterESID.fill(rowNumber.esid);
-      await sapPage.btnExecute.click();
+      await frParentPage.btnExecute.click();
 
       //assert
-      await expect(sapPage.resultCount).toBeVisible();
-      const rowCount = await sapPage.getRowCount();
+      await expect(frParentPage.resultCount).toBeVisible();
+      const rowCount = await frParentPage.getRowCount();
       
       await expect.poll(()=>frParentPage.getRowCount()).toBe(rowNumber.count);
     })

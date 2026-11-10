@@ -1,7 +1,10 @@
 import type { Page, Locator} from "@playwright/test";
 import { TablePage } from "./TablePage.js";
+import { tables } from "../utils/test-data.js";
 
 export class MailCountPage extends TablePage {
+  readonly tableName = tables.mailCount;
+  readonly columns = ["PARENT_ID", "OWNER", "CHANGED_BY"];
   readonly filterPARENTID: Locator;
   readonly filterOWNER: Locator;
   readonly filterSTATUS: Locator;

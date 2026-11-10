@@ -1,7 +1,10 @@
 import type { Page, Locator } from "@playwright/test";
 import { TablePage } from "./TablePage.js";
+import { tables } from "../utils/test-data.js";
 
 export class FrAuditPage extends TablePage {
+    readonly tableName = tables.frAudit;
+    readonly columns = ["FR_GUID", "EVENT_TYPE", "CHANGED_BY"];
     readonly filterFRGUID: Locator;
     readonly filterEVENTTYPE: Locator;
     readonly filterCHANGEDBY: Locator;

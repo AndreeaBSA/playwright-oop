@@ -1,5 +1,6 @@
 import type { Keyboard, Locator, Page } from "@playwright/test";
 
+
 export class SapTableBrowserPage {
   readonly page: Page;
   readonly commandInput: Locator;

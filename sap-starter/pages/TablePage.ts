@@ -1,28 +1,25 @@
-import type { Page, Locator} from "@playwright/test";
+import type { Locator } from "@playwright/test";
+import { SapTableBrowserPage } from "./SapTableBrowserPage.js";
+import { transactions } from "../utils/test-data.js";
 
+export abstract class TablePage extends SapTableBrowserPage {
 
-export class TablePage{
-    readonly page: Page;
-
-constructor(page:Page) {
-    this.page = page;
-}
-
-  filterInput(key: string): Locator {
-    return this.page.getByPlaceholder(new RegExp(`Filter by\\s+${key}$`, "i"));
+  abstract readonly tableName: string;
+  abstract readonly columns: string[];
+  
+  async open() {
+    await this.goTo();
+    await this,this.commandInput.fill(transactions.se16);
+    await this.btnOpen.click();
+    await this.tableNameInput.fill(this.tableName);
+    await this.btnExecute.click();
   }
 
   tableCell(rowIndex: number, columnName: string): Locator {
-    return this.page
-      .locator(`tbody tr[data-row-index="${rowIndex}"]`)
-      .locator(`[data-column-name="${columnName}"]`);
+    return this.cell(rowIndex, columnName);
   }
 
-  async getRowCount(): Promise<number> {
-    return this.page.locator("tbody tr[data-row-index]").count();
-  }
-
-  async columnName(column: string[]){
+  async columnName(column: string[]) {
     return this.page.locator(`[data-column-name="${column}"]`)
   }
 
