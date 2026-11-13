@@ -18,9 +18,13 @@ export class FrParentPage extends TablePage {
     this.filterSTATUS = this.filterInput("STATUS");
   }
   
-  //pages/FrParentPage.ts
-  async readRow(rowIndex: number): Promise<FrParentRow>
-for (const [column, value] of Object.entries(testCase.expected)) {
-  
-  await this.getCellText(rowIndex, "<COLOANA>");
+
+  async readRow(rowIndex: number): Promise<FrParentRow>{
+    return {
+            esid: await this.getCellText(rowIndex, "ESID"),
+            frGuid: await this.getCellText(rowIndex, "FR_GUID"),
+            entGuid: await this.getCellText(rowIndex, "ENT_GUID"),
+            status: await this.getCellText(rowIndex, "STATUS"),
+    }
+  }
 }

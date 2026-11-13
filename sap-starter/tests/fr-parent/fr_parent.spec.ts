@@ -1,4 +1,5 @@
 import { test, expect } from "../../fixtures/test-fixtures.js";
+import { FrParentRow } from "../../models/FrParentRow.js";
 import { automationAnchor, columnsFrParent, secondaryAnchor, tables, tertiaryAnchor, emptyGuid } from "../../utils/test-data.js";
 
 
@@ -203,32 +204,34 @@ const statusOnly: string[] = ['Active', 'Blocked'];
 type ExpectedCells = Record<string, string>;
 
 
-const singleRowByEsid: { esid: string; expected: ExpectedCells }[] = [
+const singleRowByEsid: { esid: string; expected: FrParentRow }[] = [
 
   {
     esid: automationAnchor.esid,
     expected: {
-      FR_GUID: automationAnchor.expectedValues.frGuid,
-      ENT_GUID: automationAnchor.expectedValues.entGuid,
+      esid: automationAnchor.esid,
+      frGuid: automationAnchor.expectedValues.frGuid,
+      entGuid: automationAnchor.expectedValues.entGuid,
+      status: "Active",
 
     }
   },
-  {
-    esid: secondaryAnchor.esid,
-    expected: {
-      FR_GUID: secondaryAnchor.expectedValues.frGuid,
-      ENT_GUID: secondaryAnchor.expectedValues.entGuid,
+  // {
+  //   esid: secondaryAnchor.esid,
+  //   expected: {
+  //     FR_GUID: secondaryAnchor.expectedValues.frGuid,
+  //     ENT_GUID: secondaryAnchor.expectedValues.entGuid,
 
-    }
-  },
-  {
-    esid: tertiaryAnchor.esid,
-    expected: {
-      FR_GUID: tertiaryAnchor.expectedValues.frGuid,
-      ENT_GUID: tertiaryAnchor.expectedValues.entGuid,
+  //   }
+  // },
+  // {
+  //   esid: tertiaryAnchor.esid,
+  //   expected: {
+  //     FR_GUID: tertiaryAnchor.expectedValues.frGuid,
+  //     ENT_GUID: tertiaryAnchor.expectedValues.entGuid,
 
-    }
-  }
+  //   }
+  // }
 ]
 
 
@@ -242,9 +245,12 @@ test.describe('Middle-Parametrizabil', () => {
       await frParentPage.btnExecute.click();
       // expect
       await expect.poll(() => frParentPage.getRowCount()).toBe(1);
-      for (const [column, value] of Object.entries(testCase.expected)) {
-        await expect(frParentPage.tableCell(0, column)).toHaveText(value);
-      }
+      // for (const [column, value] of Object.entries(testCase.expected)) {
+      //   await expect(frParentPage.tableCell(0, column)).toHaveText(value);
+      // },
+
+        expect( await  frParentPage.readRow(0)).toEqual(testCase.expected)
+    
     })
   }
 

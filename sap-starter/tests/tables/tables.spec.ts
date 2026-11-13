@@ -16,8 +16,6 @@ test('Fiecare tabel se deschide cu coloanele lui si are date', async ({ itmDetai
 
 
 
-
-    
 });
 
 /*Pentru al 7-lea tabel pornim de la: 

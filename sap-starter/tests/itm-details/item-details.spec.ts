@@ -1,4 +1,5 @@
 import { test, expect } from "../../fixtures/test-fixtures.js";
+import { ItmDetailsRow } from "../../models/ItmDetailsRow.js";
 import { openBrowserTransaction } from "../../utils/actions.js";
 
 import { automationAnchor, columnsFrParent, secondaryAnchor, tables, tertiaryAnchor, transactions, emptyGuid, columnsItmDetails } from "../../utils/test-data.js";
@@ -113,7 +114,8 @@ type TableCase = {
         region:string;
         setupFr:string;
         frGuid:string;
-    }
+    },
+
 }
 
 const tableCases: TableCase[] = [
@@ -215,12 +217,20 @@ test.describe("MIDDLE - Table Selection", () => {
     });
 
     for (const c of tableCases) {
-        test(`4,7 ${c.title} se incarca, Filtrez, CALL-OFF`, async ({ sapPage }) => {
-            await sapPage.executeTable(tables.itmDetails,c.filters);
-            await expect(sapPage.cell(0,"CALLOFF")).toHaveText(c.expected.callOff);
-            await expect(sapPage.cell(0,"SETUP_FR")).toHaveText(c.expected.setupFr);
-            await expect(sapPage.cell(0,"REGION")).toHaveText(c.expected.region);
-            await expect(sapPage.cell(0, "SETUP_FR")).toContainText(c.expected.frGuid)
+        test(`4,7 ${c.title} se incarca, Filtrez, CALL-OFF`, async ({ itmDetailsPage }) => {
+            await itmDetailsPage.executeTable(tables.itmDetails,c.filters);
+
+            // await expect(sapPage.cell(0,"CALLOFF")).toHaveText(c.expected.callOff);
+            // await expect(sapPage.cell(0,"SETUP_FR")).toHaveText(c.expected.setupFr);
+            // await expect(sapPage.cell(0,"REGION")).toHaveText(c.expected.region);
+            // await expect(sapPage.cell(0, "SETUP_FR")).toContainText(c.expected.frGuid)
+
+            const row = await itmDetailsPage.readRow(0);
+
+            const expectedRow:ItmDetailsRow={parentId: c.expected.parentId,callOff: c.expected.callOff,setupFr: c.expected.setupFr,region: c.expected.region}
+
+             expect(row).toEqual(expectedRow);
+
         });
     }
 });
