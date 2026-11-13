@@ -4,7 +4,7 @@ import { tables } from "../utils/test-data.js";
 
 export class FrAuditPage extends TablePage {
     readonly tableName = tables.frAudit;
-    readonly columns = ["FR_GUID", "EVENT_TYPE", "CHANGED_BY"];
+    readonly columns = ["AUDIT_ID", "FR_GUID", "EVENT_TYPE", "CHANGED_BY", "CHANGED_AT", "DETAILS"];
     readonly filterFRGUID: Locator;
     readonly filterEVENTTYPE: Locator;
     readonly filterCHANGEDBY: Locator;

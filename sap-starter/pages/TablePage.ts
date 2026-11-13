@@ -6,7 +6,7 @@ export abstract class TablePage extends SapTableBrowserPage {
 
   abstract readonly tableName: string;
   abstract readonly columns: string[];
-  
+
   async open() {
     await this.goTo();
     await this,this.commandInput.fill(transactions.se16);
@@ -15,6 +15,14 @@ export abstract class TablePage extends SapTableBrowserPage {
     await this.btnExecute.click();
   }
 
+async readColumnNames(): Promise<string[]> {
+  return this.columnHeaderRow
+    .locator("[data-column-name]")
+    .evaluateAll((headers) =>
+      headers.map((header) =>
+        header.getAttribute("data-column-name") ?? ""));
+}
+  
   tableCell(rowIndex: number, columnName: string): Locator {
     return this.cell(rowIndex, columnName);
   }

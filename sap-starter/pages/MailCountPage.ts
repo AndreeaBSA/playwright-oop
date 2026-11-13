@@ -4,7 +4,7 @@ import { tables } from "../utils/test-data.js";
 
 export class MailCountPage extends TablePage {
   readonly tableName = tables.mailCount;
-  readonly columns = ["PARENT_ID", "OWNER", "CHANGED_BY"];
+  readonly columns = [ "MAIL_ID", "PARENT_ID", "COUNT", "OWNER", "STATUS"];
   readonly filterPARENTID: Locator;
   readonly filterOWNER: Locator;
   readonly filterSTATUS: Locator;

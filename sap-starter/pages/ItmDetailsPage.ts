@@ -4,6 +4,7 @@ import { tables } from "../utils/test-data.js";
 
 export class ItmDetailsPage extends TablePage {
   readonly tableName = tables.itmDetails;
+  readonly columns = ["PARENT_ID", "CALLOFF", "SETUP_FR", "NWR_ITEM_ID", "REGION", "COMMENTS"];
   readonly filterPARENTID: Locator;
   readonly filterREGION: Locator;
 

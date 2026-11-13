@@ -4,6 +4,7 @@ import { tables } from "../utils/test-data.js";
 
 export class EntitlementPage extends TablePage{
   readonly tableName = tables.entitlement;
+  readonly columns = ["ENT_GUID", "ENT_TYPE", "ACTIVE", "CREATED_AT"];
   readonly filterEntitlementGuid: Locator;
   readonly filterEntitlementType: Locator;
   readonly filterActive: Locator;
